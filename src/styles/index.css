@@ -1,0 +1,186 @@
+@import 'tailwindcss';
+
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+/* ------------------------------------------------------------------
+   Design tokens. Every colour in the UI resolves to one of these, so
+   both themes stay in sync. Edit here, not in components.
+------------------------------------------------------------------- */
+:root,
+[data-theme='dark'] {
+  --bg: #070b14;
+  --sidebar: #0a1020;
+  --card: #0d1525;
+  --card-elevated: #111c30;
+  --fg: #f3f6fc;
+  --fg-muted: #9baac2;
+  --fg-subtle: #74839c;
+  --border: rgb(148 170 210 / 0.12);
+  --border-strong: rgb(148 170 210 / 0.22);
+  --primary: #3b82f6;
+  --primary-fg: #ffffff;
+  --accent: #7957ff;
+  --success: #34d399;
+  --danger: #f87171;
+  --ring: #60a5fa;
+  --glow-blue: rgb(59 130 246 / 0.18);
+  --glow-violet: rgb(121 87 255 / 0.16);
+  --shadow: 0 1px 0 rgb(255 255 255 / 0.03) inset, 0 12px 32px -16px rgb(0 0 0 / 0.6);
+  --overlay: rgb(3 6 12 / 0.72);
+  --grid-line: rgb(148 170 210 / 0.05);
+  color-scheme: dark;
+}
+
+[data-theme='light'] {
+  --bg: #f6f8fc;
+  --sidebar: #ffffff;
+  --card: #ffffff;
+  --card-elevated: #f1f4fa;
+  --fg: #0b1222;
+  --fg-muted: #4a5873;
+  --fg-subtle: #66738c;
+  --border: rgb(30 50 90 / 0.1);
+  --border-strong: rgb(30 50 90 / 0.18);
+  --primary: #2563eb;
+  --primary-fg: #ffffff;
+  --accent: #6d4aff;
+  --success: #059669;
+  --danger: #dc2626;
+  --ring: #2563eb;
+  --glow-blue: rgb(59 130 246 / 0.1);
+  --glow-violet: rgb(121 87 255 / 0.08);
+  --shadow: 0 1px 2px rgb(15 23 42 / 0.04), 0 12px 32px -18px rgb(15 23 42 / 0.18);
+  --overlay: rgb(15 23 42 / 0.4);
+  --grid-line: rgb(30 50 90 / 0.05);
+  color-scheme: light;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-sidebar: var(--sidebar);
+  --color-card: var(--card);
+  --color-elevated: var(--card-elevated);
+  --color-fg: var(--fg);
+  --color-muted: var(--fg-muted);
+  --color-subtle: var(--fg-subtle);
+  --color-line: var(--border);
+  --color-line-strong: var(--border-strong);
+  --color-primary: var(--primary);
+  --color-primary-fg: var(--primary-fg);
+  --color-accent: var(--accent);
+  --color-success: var(--success);
+  --color-danger: var(--danger);
+  --color-ring: var(--ring);
+  --color-overlay: var(--overlay);
+
+  --font-sans: 'Geist', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'Geist Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --shadow-card: var(--shadow);
+  --radius-card: 16px;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-feature-settings: 'ss01', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+  ::selection {
+    background: color-mix(in srgb, var(--primary) 35%, transparent);
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+  /* Offset anchor jumps so headings clear the sticky top bar. */
+  [data-section] {
+    scroll-margin-top: 5.5rem;
+  }
+  button,
+  [role='button'] {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+@layer components {
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--shadow);
+  }
+  .text-gradient {
+    background-image: linear-gradient(100deg, #60a5fa 0%, #3b82f6 25%, #7957ff 55%, #a78bfa 75%, #60a5fa 100%);
+    background-size: 220% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  [data-theme='light'] .text-gradient {
+    background-image: linear-gradient(100deg, #1d4ed8 0%, #2563eb 25%, #6d4aff 55%, #7c3aed 75%, #1d4ed8 100%);
+  }
+  .text-gradient-animated {
+    animation: gradient-pan 10s ease-in-out infinite alternate;
+  }
+  .bg-grid {
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 32px 32px;
+  }
+  .ambient {
+    background:
+      radial-gradient(60% 50% at 15% 0%, var(--glow-blue), transparent 70%),
+      radial-gradient(45% 45% at 95% 10%, var(--glow-violet), transparent 70%);
+  }
+  .kbd {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1;
+    padding: 3px 6px;
+    border-radius: 6px;
+    border: 1px solid var(--border-strong);
+    background: var(--card-elevated);
+    color: var(--fg-muted);
+  }
+}
+
+@keyframes gradient-pan {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 100% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text-gradient-animated {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
